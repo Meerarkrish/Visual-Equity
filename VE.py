@@ -102,22 +102,24 @@ with col_map:
     st.markdown("### 🗺️ Precision Hotspot Mapping")
     st.caption("Country-level accuracy using Natural Earth Geodata.")
     
-    # Create Folium Map
-    m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
 
-    # Add Choropleth Layer (Heatmap by country)
-    folium.Choropleth(
-        geo_data=world_data,
-        name="choropleth",
-        data=world_data,
-        columns=["iso_a3", "vad_risk"],
-        key_on="feature.properties.iso_a3",
-        fill_color="YlOrRd",
-        fill_opacity=0.7, # Cleaned this line
-        line_opacity=0.2,
-        legend_name="Vitamin A Deficiency Risk (%)",
-        highlight=True
-    ).add_to(m)
+ # 1. Create the Map Object first
+# Define 'm' here!
+m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
+
+# 2. Now you can add the Choropleth to 'm'
+folium.Choropleth(
+    geo_data=world_data,
+    name="choropleth",
+    data=world_data,
+    columns=["iso_a3", "vad_risk"],
+    key_on="feature.properties.iso_a3",
+    fill_color="YlOrRd",
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name="Vitamin A Deficiency Risk (%)",
+    highlight=True
+).add_to(m) # This will now work because 'm' exists above
 
     # Tooltip logic for real country names
     style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
