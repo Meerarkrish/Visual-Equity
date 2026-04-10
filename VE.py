@@ -129,7 +129,7 @@ NIL = folium.features.GeoJson(
             style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
         )
     )
-    m.add_child(NIL)
+m.add_child(NIL)
     
     # Final render
     st_folium(m, width="100%", height=550)
