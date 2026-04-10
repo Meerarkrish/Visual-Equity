@@ -116,10 +116,9 @@ with col_map:
     ).add_to(m)
 
     # Tooltip and Style Logic
-    style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
-    highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
-    
-    NIL = folium.features.GeoJson(
+style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
+highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
+NIL = folium.features.GeoJson(
         world_data,
         style_function=style_function, 
         control=False,
