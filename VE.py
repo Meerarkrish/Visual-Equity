@@ -96,12 +96,46 @@ st.sidebar.info(f"Current Time in {selected_tz}:\n**{local_time}**")
 
 # --- 5. INTERACTIVE GEOMAPPING ---
 col_map, col_analysis = st.columns([2.5, 1])
-
+    
 with col_map:
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
     st.markdown("### 🗺️ Precision Hotspot Mapping")
-    st.caption("Country-level accuracy using Natural Earth Geodata.")
     
+    # 1. Create the map
+    m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
+
+    # 2. Add Choropleth
+    folium.Choropleth(
+        geo_data=world_data,
+        data=world_data,
+        columns=["iso_a3", "vad_risk"],
+        key_on="feature.properties.iso_a3",
+        fill_color="YlOrRd",
+        fill_opacity=0.7,
+        line_opacity=0.2,
+    ).add_to(m)
+
+    # 3. FIX THE INDENTATION HERE
+    # Make sure these lines have the EXACT same number of spaces as the line above
+    style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
+    highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
+    
+    NIL = folium.features.GeoJson(
+        world_data,
+        style_function=style_function, 
+        control=False,
+        highlight_function=highlight_function, 
+        tooltip=folium.features.GeoJsonTooltip(
+            fields=['name', 'uv_index', 'vad_risk'],
+            aliases=['Country: ', 'UV Index: ', 'Risk %: '],
+            style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
+        )
+    )
+    m.add_child(NIL)
+    
+    # 4. Display the map
+    st_folium(m, width="100%", height=550)
+    st.markdown('</div>', unsafe_allow_html=True)
 
  # 1. Create the Map Object first
 # Define 'm' here!
