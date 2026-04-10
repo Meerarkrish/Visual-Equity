@@ -101,10 +101,10 @@ with col_map:
     st.markdown('<div class="content-card">', unsafe_allow_html=True)
     st.markdown("### 🗺️ Precision Hotspot Mapping")
     
-    # 1. Create the map
+    # Define the map
     m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
 
-    # 2. Add Choropleth
+    # Add the Heatmap (Choropleth)
     folium.Choropleth(
         geo_data=world_data,
         data=world_data,
@@ -115,8 +115,8 @@ with col_map:
         line_opacity=0.2,
     ).add_to(m)
 
-    # 3. FIX THE INDENTATION HERE
-    # Make sure these lines have the EXACT same number of spaces as the line above
+    # --- FIXING THE INDENTATION HERE ---
+    # These lines must be aligned with the code above
     style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
     highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
     
@@ -133,7 +133,7 @@ with col_map:
     )
     m.add_child(NIL)
     
-    # 4. Display the map
+    # Finally, render the map
     st_folium(m, width="100%", height=550)
     st.markdown('</div>', unsafe_allow_html=True)
 
