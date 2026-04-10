@@ -24,21 +24,38 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 2. DATA ENGINE: REAL WORLD COUNTRIES ---
+
+
 @st.cache_data
 def load_global_geography():
-    # Loading Natural Earth dataset (standard for all countries)
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    # Filter out Antarctica for better visual focus on inhabited regions
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
+    # 1. Use a direct URL to the official GeoJSON data
+    # This replaces the deprecated gpd.datasets.get_path
+    url = "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
+    world = gpd.read_file(url)
     
-    # Adding simulated health/environmental metadata to real countries
-    # In production, this would merge with WHO/NASA CSV data
+    # 2. Standardize column names (different sources use different names)
+    # Natural Earth uses 'ADMIN' for name and 'ISO_A3' for the code
+    if 'ADMIN' in world.columns:
+        world = world.rename(columns={'ADMIN': 'name', 'ISO_A3': 'iso_a3'})
+    elif 'name' not in world.columns:
+        # Fallback if the geojson uses 'NAME'
+        world = world.rename(columns={'NAME': 'name', 'ISO_A3': 'iso_a3'})
+
+    # 3. Filter out Antarctica
+    world = world[world['name'] != "Antarctica"]
+
+    # 4. Generate the simulated health metadata
+    import numpy as np
     np.random.seed(42)
     world['UV_Index'] = np.random.uniform(2, 12, len(world))
     world['VAD_Risk'] = np.random.uniform(5, 95, len(world))
     world['Cataract_Rate'] = (world['UV_Index'] * 40) + np.random.normal(0, 20, len(world))
+    
+    # Ensure population estimation exists for the bubble chart
+    if 'pop_est' not in world.columns:
+        world['pop_est'] = np.random.randint(100000, 1000000000, len(world))
+        
     return world
-
 world_data = load_global_geography()
 
 # --- 3. THE HEADER ---
