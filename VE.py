@@ -28,35 +28,57 @@ st.markdown("""
 
 @st.cache_data
 def load_global_geography():
-    # 1. Use a direct URL to the official GeoJSON data
-    # This replaces the deprecated gpd.datasets.get_path
     url = "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
     world = gpd.read_file(url)
     
-    # 2. Standardize column names (different sources use different names)
-    # Natural Earth uses 'ADMIN' for name and 'ISO_A3' for the code
-    if 'ADMIN' in world.columns:
-        world = world.rename(columns={'ADMIN': 'name', 'ISO_A3': 'iso_a3'})
-    elif 'name' not in world.columns:
-        # Fallback if the geojson uses 'NAME'
-        world = world.rename(columns={'NAME': 'name', 'ISO_A3': 'iso_a3'})
+    # Force column names to lowercase to avoid KeyErrors
+    world.columns = world.columns.str.lower()
+    
+    # The GeoJSON usually has 'iso_a3' or 'id'. Let's ensure 'iso_a3' exists.
+    if 'iso_a3' not in world.columns:
+        if 'id' in world.columns:
+            world['iso_a3'] = world['id']
+        else:
+            # Fallback: use the name as the key if iso is missing
+            world['iso_a3'] = world['name']
 
-    # 3. Filter out Antarctica
+    # Standardize 'name' column
+    if 'admin' in world.columns:
+        world = world.rename(columns={'admin': 'name'})
+
+    # Filter Antarctica
     world = world[world['name'] != "Antarctica"]
 
-    # 4. Generate the simulated health metadata
+    # Generate metadata
     import numpy as np
     np.random.seed(42)
-    world['UV_Index'] = np.random.uniform(2, 12, len(world))
-    world['VAD_Risk'] = np.random.uniform(5, 95, len(world))
-    world['Cataract_Rate'] = (world['UV_Index'] * 40) + np.random.normal(0, 20, len(world))
+    world['uv_index'] = np.random.uniform(2, 12, len(world))
+    world['vad_risk'] = np.random.uniform(5, 95, len(world))
+    world['cataract_rate'] = (world['uv_index'] * 40) + np.random.normal(0, 20, len(world))
     
-    # Ensure population estimation exists for the bubble chart
+    # Ensure population exists for scatter plot
     if 'pop_est' not in world.columns:
         world['pop_est'] = np.random.randint(100000, 1000000000, len(world))
         
     return world
+
+# --- Update your Choropleth section to use lowercase names ---
 world_data = load_global_geography()
+
+# Inside your col_map:
+folium.Choropleth(
+    geo_data=world_data,
+    name="choropleth",
+    data=world_data,
+    columns=["iso_a3", "vad_risk"], # Use lowercase here
+    key_on="feature.properties.iso_a3", # Ensure this matches the GeoJSON property
+    fill_color="YlOrRd",
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name="Vitamin A Deficiency Risk (%)",
+    highlight=True
+).add_to(m)
+
 
 # --- 3. THE HEADER ---
 st.markdown("""
