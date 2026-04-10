@@ -131,10 +131,10 @@ NIL = folium.features.GeoJson(
     )
 m.add_child(NIL)
     
-    # Final render
-    st_folium(m, width="100%", height=550)
-    st.markdown('</div>', unsafe_allow_html=True)
- # 1. Create the Map Object first
+# Final render
+st_folium(m, width="100%", height=550)
+st.markdown('</div>', unsafe_allow_html=True)
+# 1. Create the Map Object first
 # Define 'm' here!
 m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
 
