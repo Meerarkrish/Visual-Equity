@@ -12,7 +12,7 @@ st.set_page_config(page_title="Visual Equity Hub", layout="wide")
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap');                                                                                                                                                                                                                           
     .stApp { background-color: #F8FAFC; }
     .header-box {
         background-color: white; padding: 40px 60px;
@@ -113,7 +113,7 @@ with col_map:
         columns=["iso_a3", "VAD_Risk"],
         key_on="feature.properties.iso_a3",
         fill_color="YlOrRd",
-        fill_opacity=0.7,
+        fill_opacity=0.7,ö
         line_opacity=0.2,
         legend_name="Vitamin A Deficiency Risk (%)",
         highlight=True
@@ -129,7 +129,7 @@ with col_map:
         control=False,
         highlight_function=highlight_function, 
         tooltip=folium.features.GeoJsonTooltip(
-            fields=['name', 'pop_est', 'UV_Index', 'VAD_Risk'],
+            fields=['name', 'pop_est', 'uv_index', 'vad_risk'],
             aliases=['Country: ', 'Population: ', 'UV Index: ', 'Risk %: '],
             style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
         )
