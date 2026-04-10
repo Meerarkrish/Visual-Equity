@@ -110,10 +110,10 @@ with col_map:
         geo_data=world_data,
         name="choropleth",
         data=world_data,
-        columns=["iso_a3", "VAD_Risk"],
+        columns=["iso_a3", "vad_risk"],
         key_on="feature.properties.iso_a3",
         fill_color="YlOrRd",
-        fill_opacity=0.7,ö
+        fill_opacity=0.7, # Cleaned this line
         line_opacity=0.2,
         legend_name="Vitamin A Deficiency Risk (%)",
         highlight=True
