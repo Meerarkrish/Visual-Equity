@@ -98,44 +98,42 @@ st.sidebar.info(f"Current Time in {selected_tz}:\n**{local_time}**")
 col_map, col_analysis = st.columns([2.5, 1])
     
 with col_map:
-    st.markdown('<div class="content-card">', unsafe_allow_html=True)
-    st.markdown("### 🗺️ Precision Hotspot Mapping")
-    
-    # Define the map
-    m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
-
-    # Add the Heatmap (Choropleth)
-    folium.Choropleth(
-        geo_data=world_data,
-        data=world_data,
-        columns=["iso_a3", "vad_risk"],
-        key_on="feature.properties.iso_a3",
-        fill_color="YlOrRd",
-        fill_opacity=0.7,
-        line_opacity=0.2,
-    ).add_to(m)
-
-    # --- FIXING THE INDENTATION HERE ---
-    # These lines must be aligned with the code above
-    style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
-    highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
-    
-    NIL = folium.features.GeoJson(
-        world_data,
-        style_function=style_function, 
-        control=False,
-        highlight_function=highlight_function, 
-        tooltip=folium.features.GeoJsonTooltip(
-            fields=['name', 'uv_index', 'vad_risk'],
-            aliases=['Country: ', 'UV Index: ', 'Risk %: '],
-            style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
-        )
-    )
-    m.add_child(NIL)
-    
-    # Finally, render the map
-    st_folium(m, width="100%", height=550)
-    st.markdown('</div>', unsafe_allow_html=True)
+....st.markdown('<div class="content-card">', unsafe_allow_html=True)
+....st.markdown("### 🗺️ Precision Hotspot Mapping")
+....
+....# Define Map
+....m = folium.Map(location=[20, 0], zoom_start=2, tiles="CartoDB Positron")
+....
+....# Add Choropleth
+....folium.Choropleth(
+........geo_data=world_data,
+........data=world_data,
+........columns=["iso_a3", "vad_risk"],
+........key_on="feature.properties.iso_a3",
+........fill_color="YlOrRd",
+........fill_opacity=0.7,
+........line_opacity=0.2,
+....).add_to(m)
+....
+....# EVERYTHING BELOW MUST HAVE THE SAME 4 SPACES AS 'm = folium.Map'
+....style_function = lambda x: {'fillColor': '#ffffff', 'color':'#000000', 'fillOpacity': 0.1, 'weight': 0.1}
+....highlight_function = lambda x: {'fillColor': '#000000', 'color':'#000000', 'fillOpacity': 0.50, 'weight': 0.1}
+....
+....NIL = folium.features.GeoJson(
+........world_data,
+........style_function=style_function, 
+........control=False,
+........highlight_function=highlight_function, 
+........tooltip=folium.features.GeoJsonTooltip(
+............fields=['name', 'uv_index', 'vad_risk'],
+............aliases=['Country: ', 'UV Index: ', 'Risk %: '],
+............style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
+........)
+....)
+....m.add_child(NIL)
+....
+....st_folium(m, width="100%", height=550)
+....st.markdown('</div>', unsafe_allow_html=True)
 
  # 1. Create the Map Object first
 # Define 'm' here!
